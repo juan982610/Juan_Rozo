@@ -1,0 +1,36 @@
+h1[class="Title"]{
+    color: brown;
+}
+
+#subTitle{
+    color: green;
+}
+
+.paragraph{
+    color: blue;
+}
+
+button:hover {
+color: gray;
+}
+
+.paragraph-long::first-line{
+    color: antiquewhite;
+}
+
+.div1 > .div2 > .div3 > p {
+    color: coral;
+}
+
+
+.div1 > .div2 > div[class="div4"]{
+    background-color: antiquewhite;
+}
+
+div + p {
+    background-color: blue;
+    color: wheat;
+}
+
+
+
