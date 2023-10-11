@@ -7,12 +7,15 @@
 </head>
 <body>
     <h1>Haz tu lista de mercado</h1>
-    <form id="Add">
-        <label style="font-weight: 900;">Nombre item:</label>
-        <input type="text" id="Item" placeholder="Ej: Marihuana">
-        <input type="submit" value="Agregar +">
+    <form id="js-form-add-item">
+        <label style="font-weight: 900;">
+            Nombre item:
+            <input type="text" id="js-input-Item" placeholder="Ej: Marihuana">
+        </label>
+        <button>Agregar +</button>
     </form>
-    <ul id="List">
+    
+    <ul class="js-list-items">
         <!-- <div id="Product">
             <input type="checkbox" id="Complete">
             <label>Marihuana</label>
