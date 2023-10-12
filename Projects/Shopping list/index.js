@@ -11,7 +11,6 @@ const $form = document.getElementById(stringObjectDOM.formAddItemId);
 const $input = document.querySelector(stringObjectDOM.inputItemSelector);
 let idItemIterador = 0;
 
-
 const localStorageDefault = () => {
     let products;
     const countItemsLocarStorage = localStorage.length;
@@ -28,20 +27,14 @@ const updateItemLocalStorageDefault = () => {
     localStorage.setItem('LIST_MARK_1',JSON.stringify(products));
 }
 
-const deleteItemLocalStorageDefault = () => {
-    localStorage.setItem('LIST_MARK_1',JSON.stringify(products));
-}
-
 const products = localStorageDefault();
 
 const render = () => {
     $listItemsContainer.innerHTML = '';
     products.forEach(product => { 
-    $listItemsContainer.appendChild(createProduct(product.product))
+    $listItemsContainer.appendChild(createProduct(product))
     })
 }
-
-
 
 const handleSubmit = event => {
     event.preventDefault();
@@ -52,56 +45,47 @@ const handleSubmit = event => {
 }
 
 const check = (event) => {
-    event.preventDefault();
     const completed = event.target.checked;
     const idProductCompleted = event.target.id;
     const nodoProductCompleted = document.getElementById(idProductCompleted).nextSibling;
     const nameProductCompleted = nodoProductCompleted.textContent;
 
-    const productsNew = products.map(product => {
-        if (product.product === nameProductCompleted) {
-            return { ...product, check: completed};
-        }
-        return product  ; //Pendiente de revisión.
-    });
-    console.log(products);
-    console.log(productsNew);
+    const indexProductCompleted = products.findIndex((product) => product.product === nameProductCompleted);
+    
+    if(indexProductCompleted !== -1){
+        products[indexProductCompleted].made = completed;
+        const moveProduct = products[indexProductCompleted]
+        products.splice(indexProductCompleted,1);
+        completed ? products.unshift(moveProduct) : products.push(moveProduct); 
+    }
+    updateItemLocalStorageDefault();
     render();
 }; 
 
 const deleteProduct = (event) => {
-    console.log(products);
     const idProduct = event.target.className;
     const productDelete = document.getElementById(idProduct).nextSibling; 
-    console.log(productDelete.textContent);
-    console.log(typeof productDelete.textContent)
-    for (let i = 0; i < products.length; i++) {
-        if(products[i].product === productDelete.textContent){
-            console.log(typeof products[i].product);
-        }; 
+    const textProductDelete = productDelete.textContent; 
+    const indexDelete = products.findIndex((product) => product.product === textProductDelete);
+    if(indexDelete !== -1){
+        products.splice(indexDelete,1); 
+        render();
+        updateItemLocalStorageDefault();
     }
-
-    // console.log(idProductDelete);
-    // const idObjectDelete = products.findIndex(product => product.product === productDelete.textContent);
-    // console.log(idObjectDelete);
-
-    // $listItemsContainer.removeChild(productDelete);
 }
 
 const initListeners = () => {
     $form.addEventListener('submit', handleSubmit); 
-  }
-  
-  const main = () => {
+}
+
+const main = () => {
     initListeners()
     render()
-  }
-  
-  main()
+}
 
+main();
 
-
-function createProduct(value){
+function createProduct(product){
     //Creamos los elementos de lista que necesitamos
     const $newListElement = document.createElement("li"); // <li> <li/>
     const $checkButtonElement = document.createElement("input"); // <input />
@@ -113,10 +97,11 @@ function createProduct(value){
     $checkButtonElement.type = 'checkbox';
     $checkButtonElement.id = checkButtonId;
     $checkButtonElement.name = checkButtonId;
+    $checkButtonElement.checked = product.made;
     $checkButtonElement.addEventListener('change',check)
 
     $labelElement.id = checkButtonId; 
-    $labelElement.innerText = value + " ";
+    $labelElement.innerText = product.product;
 
     $deleteButtonElement.innerText = "x";
     $deleteButtonElement.className = checkButtonId; 
