@@ -4,7 +4,7 @@ const episodeCharacter = {};
 
 const getCharacters = async () => {
     try{
-        const dataCharacters = await fetchFuction(URL_CHARACTERS);
+        const dataCharacters = await getDataFetch(URL_CHARACTERS);
         const characters = await Promise.all(dataCharacters.results.map(async character => {
             const episodesData = await Promise.all(character.episode.map(async episodeUrl => {
                 return  getEpisodesCharacter(episodeUrl)
@@ -25,7 +25,7 @@ const getCharacters = async () => {
 
 const getEpisodesCharacter = async (url) => {
     if(!episodeCharacter[url]){
-        const dataEpisodesCharacter = await fetchFuction(url);
+        const dataEpisodesCharacter = await getDataFetch(url);
         episodeCharacter[url] = { 
                 id: dataEpisodesCharacter.id,
                 name: dataEpisodesCharacter.name
@@ -34,7 +34,7 @@ const getEpisodesCharacter = async (url) => {
     return episodeCharacter[url]; 
 }
 
-const fetchFuction = async (url) => {
+const getDataFetch = async (url) => {
     try {
         const response = await fetch(url);
         if (!response.ok) {
